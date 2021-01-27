@@ -1,4 +1,4 @@
-distancia = float(input('Qual é a \033[4mdistância\033[m, em Km, da sua viagem? '))
+distancia = float(input('Qual é a \033[4;31mdistância\033[m, em Km, da sua viagem? '))
 
 if distancia <= 200:
     preco = distancia * 0.5

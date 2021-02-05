@@ -1,6 +1,8 @@
 lanche = ('Hambúrguer', 'Suco', 'Pizza', 'Pudim')
 print(lanche[::-1])
 print(lanche[-3:])
+print(sorted(lanche))
+print(lanche)
 # Tuplas são imutáveis
 for comida in lanche:
     print(f'Eu vou comer {comida}')

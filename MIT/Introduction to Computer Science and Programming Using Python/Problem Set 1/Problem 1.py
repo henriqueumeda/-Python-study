@@ -1,4 +1,4 @@
-s = input('Digite uma frase: ')
+s = input('Write something: ')
 #s = 'azcbobobegghakl'
 count = 0
 for letter in s:

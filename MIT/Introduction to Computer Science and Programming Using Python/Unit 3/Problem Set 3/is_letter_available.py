@@ -1,9 +1,12 @@
-def isLetterAvailable(lettersGuessed):
+def isLetterAvailable(lettersGuessed, user_letter):
     '''
     lettersGuessed: list, what letters have been guessed so far
     returns: boolean, True if the letter isn't in lettersGuessed;
       False otherwise
     '''
-    if letter not in lettersGuessed:
+    if user_letter not in lettersGuessed:
         return True
     return False
+
+lettersGuessed = ['e', 'i', 'k', 'p', 'r', 's']
+print(isLetterAvailable(lettersGuessed, 'e'))

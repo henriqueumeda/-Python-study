@@ -102,7 +102,7 @@ def isLetterAvailable(lettersGuessed):
     '''
     if letter not in lettersGuessed:
         return True
-    return True
+    return False
 
 
 def hangman(secretWord):

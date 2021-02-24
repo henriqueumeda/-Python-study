@@ -94,6 +94,17 @@ def getAvailableLetters(lettersGuessed):
     return available_letters
     
 
+def isLetterAvailable(lettersGuessed):
+    '''
+    lettersGuessed: list, what letters have been guessed so far
+    returns: boolean, True if the letter isn't in lettersGuessed;
+      False otherwise
+    '''
+    if letter not in lettersGuessed:
+        return True
+    return True
+
+
 def hangman(secretWord):
     '''
     secretWord: string, the secret word to guess.

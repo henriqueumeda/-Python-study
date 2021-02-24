@@ -1,5 +1,4 @@
 import string
-print(string.ascii_lowercase)
 
 def getAvailableLetters(lettersGuessed):
     '''
@@ -18,5 +17,5 @@ def getAvailableLetters(lettersGuessed):
     available_letters = ''.join(letters_not_guessed)
     return available_letters
 
-lettersGuessed = ['e', 'i', 'k', 'p', 'r', 's']
+lettersGuessed = []
 print(getAvailableLetters(lettersGuessed))

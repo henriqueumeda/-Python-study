@@ -1,14 +1,3 @@
-"""
-
-displayHand(hand) # Implemented for you
-a q l l m u i
-hand = updateHand(hand, 'quail') # You implement this function!
-hand
-{'a':0, 'q':0, 'l':1, 'm':1, 'u':0, 'i':0}
-displayHand(hand)
-l m
-"""
-
 def updateHand(hand, word):
     """
     Assumes that 'hand' has all the letters in word.

@@ -35,10 +35,10 @@ def playHand(hand, wordList, n):
             hand = updateHand(hand, word)
             number_of_remaining_letters = calculateHandlen(hand)
             if number_of_remaining_letters == 0:
-                print('Run out of letters. Total score: {} points.'.format(acumulated_points))
+                print('Run out of letters. Total score: {} points.\n'.format(acumulated_points))
                 break
         elif word == '.':
-            print('Goodbye! Total score: {} points.'.format(acumulated_points))
+            print('Goodbye! Total score: {} points.\n'.format(acumulated_points))
             break
         else:
             print('Invalid word, please try again.\n')

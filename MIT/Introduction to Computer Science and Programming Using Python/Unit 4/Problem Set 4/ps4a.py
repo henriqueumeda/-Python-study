@@ -238,12 +238,12 @@ def playHand(hand, wordList, n):
             number_of_remaining_letters = calculateHandlen(hand)
             # End the game (break out of the loop)
             if number_of_remaining_letters == 0:
-                print('Run out of letters. Total score: {} points.'.format(acumulated_points))
+                print('Run out of letters. Total score: {} points.\n'.format(acumulated_points))
                 break
         # If the input is a single period:
         elif word == '.':
             # Game is over (user entered a '.' or ran out of letters), so tell user the total score
-            print('Goodbye! Total score: {} points.'.format(acumulated_points))
+            print('Goodbye! Total score: {} points.\n'.format(acumulated_points))
             break
         # If the word is not valid:
         else:
@@ -269,8 +269,22 @@ def playGame(wordList):
  
     2) When done playing the hand, repeat from step 1    
     """
-    # TO DO ... <-- Remove this comment when you code this function
-    print("playGame not yet implemented.") # <-- Remove this line when you code the function
+    first_game = True
+    while True:
+        choice = input('Enter n to deal a new hand, r to replay the last hand, or e to end game: ').lower().strip()
+        if choice == 'n':
+            hand = dealHand(HAND_SIZE)
+            first_game = False
+        elif choice == 'r':
+            if first_game == True:
+                print('You have not played a hand yet. Please play a new hand first!\n')
+                continue
+        elif choice == 'e':
+            break
+        else:
+            print('Invalid command.')
+            continue
+        playHand(hand, wordList, HAND_SIZE)
    
 
 

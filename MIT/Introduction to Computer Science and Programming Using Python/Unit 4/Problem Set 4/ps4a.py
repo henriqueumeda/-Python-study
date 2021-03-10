@@ -216,34 +216,41 @@ def playHand(hand, wordList, n):
       n: integer (HAND_SIZE; i.e., hand size required for additional points)
       
     """
-    # BEGIN PSEUDOCODE <-- Remove this comment when you code this function; do your coding within the pseudocode (leaving those comments in-place!)
-    # Keep track of the total score
-    
+    acumulated_points = 0
+    number_of_remaining_letters = n
     # As long as there are still letters left in the hand:
-    
+    while number_of_remaining_letters > 0:
         # Display the hand
-        
+        print('Current hand: ', end='')
+        displayHand(hand)
         # Ask user for input
-        
-        # If the input is a single period:
-        
-            # End the game (break out of the loop)
-
-            
+        word = input('Enter word, or a "." to indicate that you are finished: ')
         # Otherwise (the input is not a single period):
-        
-            # If the word is not valid:
-            
-                # Reject invalid word (print a message followed by a blank line)
+        # Otherwise (the word is valid):
+        if isValidWord(word, hand, wordList) == True:
+            word_points = getWordScore(word, n)
+            # Keep track of the total score
+            acumulated_points += word_points
+            # Tell the user how many points the word earned, and the updated total score, in one line followed by a blank line
+            print('"{}" earned {}. Total: {} points\n'.format(word, word_points, acumulated_points))
+            # Update the hand
+            hand = updateHand(hand, word)
+            number_of_remaining_letters = calculateHandlen(hand)
+            # End the game (break out of the loop)
+            if number_of_remaining_letters == 0:
+                print('Run out of letters. Total score: {} points.'.format(acumulated_points))
+                break
+        # If the input is a single period:
+        elif word == '.':
+            # Game is over (user entered a '.' or ran out of letters), so tell user the total score
+            print('Goodbye! Total score: {} points.'.format(acumulated_points))
+            break
+        # If the word is not valid:
+        else:
+            # Reject invalid word (print a message followed by a blank line)
+            print('Invalid word, please try again.\n')
 
-            # Otherwise (the word is valid):
 
-                # Tell the user how many points the word earned, and the updated total score, in one line followed by a blank line
-                
-                # Update the hand 
-                
-
-    # Game is over (user entered a '.' or ran out of letters), so tell user the total score
 
 
 #

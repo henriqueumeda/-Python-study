@@ -53,6 +53,14 @@ def get_story_string():
     f.close()
     return story
 
+def decrypt_story():
+    """
+    Returns: the joke telled in get_story_string() function in decrypted text.
+    """
+    encrypted_story = CiphertextMessage(get_story_string())
+    decrypted_story = encrypted_story.decrypt_message()
+    return decrypted_story
+
 WORDLIST_FILENAME = 'words.txt'
 
 class Message(object):
@@ -255,3 +263,8 @@ print('Actual Output:', plaintext.get_message_text_encrypted())
 ciphertext = CiphertextMessage('jgnnq')
 print('Expected Output:', (24, 'hello'))
 print('Actual Output:', ciphertext.decrypt_message())
+
+#Example test case (decrypt_story())
+story = decrypt_story()
+print("Expected Output: (16, 'Jack Florey is a mythical character created on the spur of a moment to help cover an insufficiently planned hack. He has been registered for classes at MIT twice before, but has reportedly never passed a class. It has been the tradition of the residents of East Campus to become Jack Florey for a few nights each year to educate incoming students in the ways, means, and ethics of hacking.')")
+print('Actual Output:', story)

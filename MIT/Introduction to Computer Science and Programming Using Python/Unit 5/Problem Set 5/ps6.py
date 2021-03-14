@@ -1,4 +1,6 @@
 import string
+lowercase_letters = string.ascii_lowercase
+uppercase_letters = string.ascii_uppercase
 
 ### DO NOT MODIFY THIS FUNCTION ###
 def load_words(file_name):
@@ -102,7 +104,14 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        shifted_dictionary = {}
+        for letter in lowercase_letters:
+            shifted_letter_index = lowercase_letters.index(letter) + shift
+            if shifted_letter_index > 25:
+                shifted_letter_index -= 26
+            shifted_dictionary[letter] = lowercase_letters[shifted_letter_index]
+            shifted_dictionary[letter.upper()] = uppercase_letters[shifted_letter_index]
+        return shifted_dictionary
 
     def apply_shift(self, shift):
         '''
@@ -116,7 +125,16 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        original_message = self.get_message_text()
+        shifted_message = ''
+        shifted_dictionary = self.build_shift_dict(shift)
+        for element in original_message:
+            if element in shifted_dictionary.keys():
+                shifted_message += shifted_dictionary[element]
+            else:
+                shifted_message += element
+        return shifted_message
+        
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):

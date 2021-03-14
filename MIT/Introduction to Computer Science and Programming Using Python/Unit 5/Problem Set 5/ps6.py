@@ -1,6 +1,4 @@
 import string
-lowercase_letters = string.ascii_lowercase
-uppercase_letters = string.ascii_uppercase
 
 ### DO NOT MODIFY THIS FUNCTION ###
 def load_words(file_name):
@@ -104,6 +102,8 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
+        lowercase_letters = string.ascii_lowercase
+        uppercase_letters = string.ascii_uppercase
         shifted_dictionary = {}
         for letter in lowercase_letters:
             shifted_letter_index = lowercase_letters.index(letter) + shift
@@ -154,7 +154,10 @@ class PlaintextMessage(Message):
         Hint: consider using the parent class constructor so less 
         code is repeated
         '''
-        pass #delete this line and replace with your code here
+        Message.__init__(self, text)
+        self.shift = shift
+        self.encrypting_dict = self.build_shift_dict(shift)
+        self.message_text_encrypted = self.apply_shift(shift)
 
     def get_shift(self):
         '''
@@ -162,7 +165,7 @@ class PlaintextMessage(Message):
         
         Returns: self.shift
         '''
-        pass #delete this line and replace with your code here
+        return self.shift
 
     def get_encrypting_dict(self):
         '''
@@ -170,7 +173,7 @@ class PlaintextMessage(Message):
         
         Returns: a COPY of self.encrypting_dict
         '''
-        pass #delete this line and replace with your code here
+        return self.encrypting_dict.copy()
 
     def get_message_text_encrypted(self):
         '''
@@ -178,7 +181,7 @@ class PlaintextMessage(Message):
         
         Returns: self.message_text_encrypted
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text_encrypted
 
     def change_shift(self, shift):
         '''
@@ -191,7 +194,13 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        pass #delete this line and replace with your code here
+        assert type(shift) is int, 'shift is not an Integer' 
+        if shift < 0 or shift > 25:
+            raise ValueError('shift value is out of range (0 - 25)')
+        self.shift = shift
+        self.encrypting_dict = self.build_shift_dict(shift)
+        self.message_text_encrypted = self.apply_shift(shift)
+        
 
 
 class CiphertextMessage(Message):

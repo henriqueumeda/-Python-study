@@ -4,6 +4,7 @@ Created on Wed Mar 24 22:47:11 2021
 
 @author: Issamu Umeda
 """
+import random
 
 class Food(object):
     def __init__(self, n, v, w):
@@ -80,9 +81,42 @@ def maxVal(toConsider, avail):
             result = (withoutVal, withoutToTake)
     return result
 
-def testMaxVal(foods, maxUnits, printItems = True):
+
+def buildLargeMenu(numItems, maxVal, maxCost):
+    items = []
+    for i in range(numItems):
+        items.append(Food(str(i),
+                          random.randint(1, maxVal),
+                          random.randint(1, maxCost)))
+    return items
+
+def fastMaxVal(toConsider, avail, memo = {}):
+    """Assumes toConsider a list of items,
+    avail a weight
+    Returns a tuple of the total value of a solution to 0/1 knapsack problem
+    and the items of that solution"""
+    if (len(toConsider), avail) in memo:
+        result = memo[(len(toConsider), avail)]
+    elif toConsider == [] or avail == 0:
+        result = (0, ())
+    elif toConsider[0].getCost() > avail:
+        result = fastMaxVal(toConsider[1:], avail, memo)
+    else:
+        nextItem = toConsider[0]
+        withVal, withToTake = fastMaxVal(toConsider[1:], avail-nextItem.getCost(), memo)
+        withVal += nextItem.getValue()
+        withoutVal, withoutToTake = fastMaxVal(toConsider[1:], avail, memo)
+        if withVal > withoutVal:
+            result = (withVal, withToTake + (nextItem,))
+        else:
+            result = (withoutVal, withoutToTake)
+    memo[(len(toConsider), avail)] = result
+    return result
+
+def testMaxVal(foods, maxUnits, algorithm, printItems = True):
+    print('Menu contains', len(foods), 'items')
     print('Use search tree to allocate', maxUnits, 'calories')
-    val, taken = maxVal(foods, maxUnits)
+    val, taken = algorithm(foods, maxUnits)
     print('Total value of items taken =', val)
     if printItems:
         for item in taken:
@@ -92,6 +126,9 @@ names = ['wine', 'beer', 'pizza', 'burger', 'fries', 'cola', 'apple', 'donut', '
 values = [89, 90, 95, 100, 90, 79, 50, 10]
 calories = [123, 154, 258, 354, 365, 150, 95, 195]
 foods = buildMenu(names, values, calories)
-testGreedys(foods, 750)
-print()
-testMaxVal(foods, 750)
+# testGreedys(foods, 750)
+# print()
+# testMaxVal(foods, 750)
+for numItems in (5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 512):
+    items = buildLargeMenu(numItems, 90, 250)
+    testMaxVal(items, 750, fastMaxVal, False)

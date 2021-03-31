@@ -32,7 +32,7 @@ def load_cows(filename):
 
 
 # Problem 1
-def greedy_cow_transport(cows,limit=10):
+def greedy_cow_transport(cows,limit):
     """
     Uses a greedy heuristic to determine an allocation of cows that attempts to
     minimize the number of spaceship trips needed to transport all the cows. The
@@ -54,8 +54,39 @@ def greedy_cow_transport(cows,limit=10):
     transported on a particular trip and the overall list containing all the
     trips
     """
-    # TODO: Your code here
-    pass
+    cows_copy = list(sorted(cows.items(), key=lambda item: item[1], reverse=True))
+    spaceship = []
+    spaceship_trip = []
+    while len(cows_copy) != 0:
+        trip_weight = 0
+        key = 0
+        while key < len(cows_copy):
+            if cows_copy[key][1] + trip_weight <= limit:
+                spaceship_trip.append(cows_copy[key][0])
+                trip_weight += cows_copy[key][1]
+                cows_copy.pop(key)
+                key -= 1
+                if trip_weight == limit:
+                    break
+            key += 1
+        spaceship.append(spaceship_trip[:])
+        spaceship_trip.clear()
+    return spaceship
+    # cows_copy = dict(sorted(cows.items(), key=lambda item: item[1], reverse=True))
+    # spaceship = []
+    # spaceship_trip = []
+    # while len(cows_copy) != 0:
+    #     trip_weight = 0
+    #     for key in list(cows_copy):
+    #         if cows_copy[key] + trip_weight <= limit:
+    #             spaceship_trip.append(key)
+    #             trip_weight += cows_copy[key]
+    #             del cows_copy[key]
+    #             if trip_weight == limit:
+    #                 break
+    #     spaceship.append(spaceship_trip[:])
+    #     spaceship_trip.clear()
+    # return spaceship
 
 
 # Problem 2
@@ -108,10 +139,8 @@ lines to print the result of your problem.
 """
 
 cows = load_cows("ps1_cow_data.txt")
-limit=100
+limit=10
 print(cows)
 
 print(greedy_cow_transport(cows, limit))
 print(brute_force_cow_transport(cows, limit))
-
-

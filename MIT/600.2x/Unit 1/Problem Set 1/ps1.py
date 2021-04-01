@@ -139,8 +139,17 @@ def compare_cow_transport_algorithms():
     Returns:
     Does not return anything.
     """
-    # TODO: Your code here
-    pass
+    print('Greedy algorithm')
+    start = time.time()
+    print('Number of trips:', len(greedy_cow_transport(cows, limit)))
+    end = time.time()
+    print('Time:', end - start)
+    print()
+    print('Brute force algorithm')
+    start = time.time()
+    print('Number of trips:', len(brute_force_cow_transport(cows, limit)))
+    end = time.time()
+    print('Time:', end - start)
 
 
 """
@@ -152,13 +161,7 @@ lines to print the result of your problem.
 cows = load_cows("ps1_cow_data.txt")
 limit=10
 # print(cows)
-#
+
 # print(greedy_cow_transport(cows, limit))
-print(brute_force_cow_transport(cows, limit))
-print(brute_force_cow_transport({'MooMoo': 50, 'Milkshake': 40, 'Lotus': 40, 'Boo': 20, 'Horns': 25, 'Miss Bella': 25}, 100))
-# count = 0
-# for items in sorted(test, key=len):
-#     print(items)
-#     count += 1
-#     if count == 20:
-#         break
+# print(brute_force_cow_transport(cows, limit))
+compare_cow_transport_algorithms()

@@ -2,7 +2,7 @@
 
 import math
 import random
-
+import numpy as np
 import ps2_visualize
 import pylab
 
@@ -73,6 +73,7 @@ class RectangularRoom(object):
     A room has a width and a height and contains (width * height) tiles. At any
     particular time, each of these tiles is either clean or dirty.
     """
+
     def __init__(self, width, height):
         """
         Initializes a rectangular room with the specified width and height.
@@ -82,8 +83,10 @@ class RectangularRoom(object):
         width: an integer > 0
         height: an integer > 0
         """
-        raise NotImplementedError
-    
+        self.clean_tiles = []
+        self.width = width
+        self.height = height
+
     def cleanTileAtPosition(self, pos):
         """
         Mark the tile under the position POS as cleaned.
@@ -92,7 +95,10 @@ class RectangularRoom(object):
 
         pos: a Position
         """
-        raise NotImplementedError
+        posX = pos.getX()
+        posY = pos.getY()
+        if (int(posX), int(posY)) not in self.clean_tiles:
+            self.clean_tiles.append((int(posX), int(posY)))
 
     def isTileCleaned(self, m, n):
         """
@@ -104,15 +110,17 @@ class RectangularRoom(object):
         n: an integer
         returns: True if (m, n) is cleaned, False otherwise
         """
-        raise NotImplementedError
-    
+        if (m, n) in self.clean_tiles:
+            return True
+        return False
+
     def getNumTiles(self):
         """
         Return the total number of tiles in the room.
 
         returns: an integer
         """
-        raise NotImplementedError
+        return (self.width) * (self.height)
 
     def getNumCleanedTiles(self):
         """
@@ -120,7 +128,7 @@ class RectangularRoom(object):
 
         returns: an integer
         """
-        raise NotImplementedError
+        return len(self.clean_tiles)
 
     def getRandomPosition(self):
         """
@@ -128,7 +136,9 @@ class RectangularRoom(object):
 
         returns: a Position object.
         """
-        raise NotImplementedError
+        posX = np.random.uniform(0, self.width)
+        posY = np.random.uniform(0, self.height)
+        return Position(posX, posY)
 
     def isPositionInRoom(self, pos):
         """
@@ -137,7 +147,11 @@ class RectangularRoom(object):
         pos: a Position object.
         returns: True if pos is in the room, False otherwise.
         """
-        raise NotImplementedError
+        posX = pos.getX()
+        posY = pos.getY()
+        if posX >= 0 and posX < self.width and posY >= 0 and posY < self.height:
+            return True
+        return False
 
 
 # === Problem 2

@@ -18,6 +18,10 @@ import pylab
 # from ps2_verify_movement36 import testRobotMovement
 # If you get a "Bad magic number" ImportError, you are not using Python 3.6
 
+# For Python 3.9:
+from ps2_verify_movement39 import testRobotMovement
+# If you get a "Bad magic number" ImportError, you are not using Python 3.9
+
 
 # === Provided class Position
 class Position(object):
@@ -257,7 +261,7 @@ class StandardRobot(Robot):
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-# testRobotMovement(StandardRobot, RectangularRoom)
+testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4

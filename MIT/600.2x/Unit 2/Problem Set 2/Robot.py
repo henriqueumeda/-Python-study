@@ -182,6 +182,7 @@ class Robot(object):
         self.speed = speed
         self.position = self.room.getRandomPosition()
         self.direction = random.randint(0, 359)
+        self.room.cleanTileAtPosition(self.position)
 
     def getRobotPosition(self):
         """
@@ -224,6 +225,7 @@ class Robot(object):
         been cleaned.
         """
         raise NotImplementedError  # don't change this!
+
 
 position = Position(2.1, 2.5)
 room = RectangularRoom(10, 10)

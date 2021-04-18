@@ -309,7 +309,7 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     robots = []
     clock_ticks = 0
     for trial in range(num_trials):
-        anim = ps2_visualize.RobotVisualization(num_robots, width, height)
+        # anim = ps2_visualize.RobotVisualization(num_robots, width, height)
         room = RectangularRoom(width, height)
         for r in range(num_robots):
             robots.append(robot_type(room, speed))
@@ -317,11 +317,11 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
             clock_ticks += 1
             for robot in robots:
                 robot.updatePositionAndClean()
-            anim.update(room, robots)
+            # anim.update(room, robots)
             if (room.getNumCleanedTiles() / room.getNumTiles()) >= min_coverage:
                 robots.clear()
                 break
-    anim.done()
+    # anim.done()
     return clock_ticks / num_trials
 
 
@@ -403,12 +403,17 @@ def showPlot2(title, x_label, y_label):
 # 1) Write a function call to showPlot1 that generates an appropriately-labeled
 #     plot.
 #
-#       (... your call here ...)
-#
+title = 'Time It Takes 1-10 Robots to Clean 80% Of a Room'
+x_label = 'Number of Robots'
+y_label = 'Time-steps'
+# showPlot1(title, x_label, y_label)
+
 
 #
 # 2) Write a function call to showPlot2 that generates an appropriately-labeled
 #     plot.
 #
-#       (... your call here ...)
-#
+title = 'Time It Takes 2 Robots to Clean 80% Of Variously Shaped Rooms'
+x_label = 'Aspect Ratio'
+y_label = 'Time-steps'
+showPlot2(title, x_label, y_label)

@@ -6,7 +6,6 @@ import numpy as np
 import ps2_visualize
 import pylab
 
-
 ##################
 ## Comment/uncomment the relevant lines, depending on which version of Python you have
 ##################
@@ -18,7 +17,13 @@ import pylab
 # For Python 3.6:
 # from ps2_verify_movement36 import testRobotMovement
 # If you get a "Bad magic number" ImportError, you are not using Python 3.6
+
+# For Python 3.9:
 from ps2_verify_movement39 import testRobotMovement
+
+
+# If you get a "Bad magic number" ImportError, you are not using Python 3.9
+
 
 # === Provided class Position
 class Position(object):
@@ -236,6 +241,27 @@ class StandardRobot(Robot):
     randomly.
     """
 
+    # def updatePositionAndClean(self):
+    #     """
+    #     Simulate the passage of a single time-step.
+    #
+    #     Move the robot to a new position and mark the tile it is on as having
+    #     been cleaned.
+    #     """
+    #     speed = self.speed
+    #     room = self.room
+    #     while True:
+    #         pos = self.getRobotPosition()
+    #         direction = self.getRobotDirection()
+    #         new_position = pos.getNewPosition(direction, speed)
+    #         if room.isPositionInRoom(new_position) is True:
+    #             self.position = new_position
+    #             room.cleanTileAtPosition(new_position)
+    #             break
+    #         else:
+    #             angle = np.random.uniform(0, 359.99)
+    #             self.setRobotDirection(angle)
+
     def updatePositionAndClean(self):
         """
         Simulate the passage of a single time-step.
@@ -245,18 +271,132 @@ class StandardRobot(Robot):
         """
         speed = self.speed
         room = self.room
+        pos = self.getRobotPosition()
+        direction = self.getRobotDirection()
+        new_position = pos.getNewPosition(direction, speed)
+        if room.isPositionInRoom(new_position) is True:
+            self.position = new_position
+            room.cleanTileAtPosition(new_position)
+        else:
+            angle = np.random.uniform(0, 359.99)
+            self.setRobotDirection(angle)
+
+
+# Uncomment this line to see your implementation of StandardRobot in action!
+# testRobotMovement(StandardRobot, RectangularRoom)
+
+
+# === Problem 4
+def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
+                  robot_type):
+    """
+    Runs NUM_TRIALS trials of the simulation and returns the mean number of
+    time-steps needed to clean the fraction MIN_COVERAGE of the room.
+
+    The simulation is run with NUM_ROBOTS robots of type ROBOT_TYPE, each with
+    speed SPEED, in a room of dimensions WIDTH x HEIGHT.
+
+    num_robots: an int (num_robots > 0)
+    speed: a float (speed > 0)
+    width: an int (width > 0)
+    height: an int (height > 0)
+    min_coverage: a float (0 <= min_coverage <= 1.0)
+    num_trials: an int (num_trials > 0)
+    robot_type: class of robot to be instantiated (e.g. StandardRobot or
+                RandomWalkRobot)
+    """
+    robots = []
+    clock_ticks = 0
+    for trial in range(num_trials):
+        room = RectangularRoom(width, height)
+        for r in range(num_robots):
+            robots.append(robot_type(room, speed))
         while True:
-            pos = self.getRobotPosition()
-            direction = self.getRobotDirection()
-            new_position = pos.getNewPosition(direction, speed)
-            if room.isPositionInRoom(new_position) is True:
-                self.position = new_position
-                room.cleanTileAtPosition(new_position)
+            clock_ticks += 1
+            for robot in robots:
+                robot.updatePositionAndClean()
+            if (room.getNumCleanedTiles() / room.getNumTiles()) >= min_coverage:
+                robots.clear()
                 break
-            else:
-                angle = np.random.uniform(0, 359.99)
-                self.setRobotDirection(angle)
+    return clock_ticks / num_trials
 
 
-testRobotMovement(StandardRobot, RectangularRoom)
+# Uncomment this line to see how much your simulation takes on average
+print(runSimulation(3, 1.0, 20, 20, 1, 30, StandardRobot))
 
+
+# === Problem 5
+class RandomWalkRobot(Robot):
+    """
+    A RandomWalkRobot is a robot with the "random walk" movement strategy: it
+    chooses a new direction at random at the end of each time-step.
+    """
+
+    def updatePositionAndClean(self):
+        """
+        Simulate the passage of a single time-step.
+
+        Move the robot to a new position and mark the tile it is on as having
+        been cleaned.
+        """
+        raise NotImplementedError
+
+
+def showPlot1(title, x_label, y_label):
+    """
+    What information does the plot produced by this function tell you?
+    """
+    num_robot_range = range(1, 11)
+    times1 = []
+    times2 = []
+    for num_robots in num_robot_range:
+        print("Plotting", num_robots, "robots...")
+        times1.append(runSimulation(num_robots, 1.0, 20, 20, 0.8, 20, StandardRobot))
+        times2.append(runSimulation(num_robots, 1.0, 20, 20, 0.8, 20, RandomWalkRobot))
+    pylab.plot(num_robot_range, times1)
+    pylab.plot(num_robot_range, times2)
+    pylab.title(title)
+    pylab.legend(('StandardRobot', 'RandomWalkRobot'))
+    pylab.xlabel(x_label)
+    pylab.ylabel(y_label)
+    pylab.show()
+
+
+def showPlot2(title, x_label, y_label):
+    """
+    What information does the plot produced by this function tell you?
+    """
+    aspect_ratios = []
+    times1 = []
+    times2 = []
+    for width in [10, 20, 25, 50]:
+        height = 300 // width
+        print("Plotting cleaning time for a room of width:", width, "by height:", height)
+        aspect_ratios.append(float(width) / height)
+        times1.append(runSimulation(2, 1.0, width, height, 0.8, 200, StandardRobot))
+        times2.append(runSimulation(2, 1.0, width, height, 0.8, 200, RandomWalkRobot))
+    pylab.plot(aspect_ratios, times1)
+    pylab.plot(aspect_ratios, times2)
+    pylab.title(title)
+    pylab.legend(('StandardRobot', 'RandomWalkRobot'))
+    pylab.xlabel(x_label)
+    pylab.ylabel(y_label)
+    pylab.show()
+
+# === Problem 6
+# NOTE: If you are running the simulation, you will have to close it
+# before the plot will show up.
+
+#
+# 1) Write a function call to showPlot1 that generates an appropriately-labeled
+#     plot.
+#
+#       (... your call here ...)
+#
+
+#
+# 2) Write a function call to showPlot2 that generates an appropriately-labeled
+#     plot.
+#
+#       (... your call here ...)
+#

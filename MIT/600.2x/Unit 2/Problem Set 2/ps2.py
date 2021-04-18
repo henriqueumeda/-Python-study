@@ -11,8 +11,8 @@ import pylab
 ##################
 
 # For Python 3.5:
-#from ps2_verify_movement35 import testRobotMovement
-# If you get a "Bad magic number" ImportError, you are not using Python 3.5 
+# from ps2_verify_movement35 import testRobotMovement
+# If you get a "Bad magic number" ImportError, you are not using Python 3.5
 
 # For Python 3.6:
 # from ps2_verify_movement36 import testRobotMovement
@@ -20,6 +20,8 @@ import pylab
 
 # For Python 3.9:
 from ps2_verify_movement39 import testRobotMovement
+
+
 # If you get a "Bad magic number" ImportError, you are not using Python 3.9
 
 
@@ -28,19 +30,20 @@ class Position(object):
     """
     A Position represents a location in a two-dimensional room.
     """
+
     def __init__(self, x, y):
         """
         Initializes a position with coordinates (x, y).
         """
         self.x = x
         self.y = y
-        
+
     def getX(self):
         return self.x
-    
+
     def getY(self):
         return self.y
-    
+
     def getNewPosition(self, angle, speed):
         """
         Computes and returns the new Position after a single clock-tick has
@@ -64,7 +67,7 @@ class Position(object):
         new_y = old_y + delta_y
         return Position(new_x, new_y)
 
-    def __str__(self):  
+    def __str__(self):
         return "(%0.2f, %0.2f)" % (self.x, self.y)
 
 
@@ -238,6 +241,27 @@ class StandardRobot(Robot):
     randomly.
     """
 
+    # def updatePositionAndClean(self):
+    #     """
+    #     Simulate the passage of a single time-step.
+    #
+    #     Move the robot to a new position and mark the tile it is on as having
+    #     been cleaned.
+    #     """
+    #     speed = self.speed
+    #     room = self.room
+    #     while True:
+    #         pos = self.getRobotPosition()
+    #         direction = self.getRobotDirection()
+    #         new_position = pos.getNewPosition(direction, speed)
+    #         if room.isPositionInRoom(new_position) is True:
+    #             self.position = new_position
+    #             room.cleanTileAtPosition(new_position)
+    #             break
+    #         else:
+    #             angle = np.random.uniform(0, 359.99)
+    #             self.setRobotDirection(angle)
+
     def updatePositionAndClean(self):
         """
         Simulate the passage of a single time-step.
@@ -247,21 +271,19 @@ class StandardRobot(Robot):
         """
         speed = self.speed
         room = self.room
-        while True:
-            pos = self.getRobotPosition()
-            direction = self.getRobotDirection()
-            new_position = pos.getNewPosition(direction, speed)
-            if room.isPositionInRoom(new_position) is True:
-                self.position = new_position
-                room.cleanTileAtPosition(new_position)
-                break
-            else:
-                angle = np.random.uniform(0, 359.99)
-                self.setRobotDirection(angle)
+        pos = self.getRobotPosition()
+        direction = self.getRobotDirection()
+        new_position = pos.getNewPosition(direction, speed)
+        if room.isPositionInRoom(new_position) is True:
+            self.position = new_position
+            room.cleanTileAtPosition(new_position)
+        else:
+            angle = np.random.uniform(0, 359.99)
+            self.setRobotDirection(angle)
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-testRobotMovement(StandardRobot, RectangularRoom)
+# testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4
@@ -283,10 +305,24 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     robot_type: class of robot to be instantiated (e.g. StandardRobot or
                 RandomWalkRobot)
     """
-    raise NotImplementedError
+    robots = []
+    clock_ticks = 0
+    for trial in range(num_trials):
+        room = RectangularRoom(width, height)
+        for r in range(num_robots):
+            robots.append(robot_type(room, speed))
+        while True:
+            clock_ticks += 1
+            for robot in robots:
+                robot.updatePositionAndClean()
+            if (room.getNumCleanedTiles() / room.getNumTiles()) >= min_coverage:
+                robots.clear()
+                break
+    return clock_ticks / num_trials
+
 
 # Uncomment this line to see how much your simulation takes on average
-##print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print(runSimulation(3, 1.0, 20, 20, 1, 30, StandardRobot))
 
 
 # === Problem 5
@@ -295,6 +331,7 @@ class RandomWalkRobot(Robot):
     A RandomWalkRobot is a robot with the "random walk" movement strategy: it
     chooses a new direction at random at the end of each time-step.
     """
+
     def updatePositionAndClean(self):
         """
         Simulate the passage of a single time-step.
@@ -324,7 +361,7 @@ def showPlot1(title, x_label, y_label):
     pylab.ylabel(y_label)
     pylab.show()
 
-    
+
 def showPlot2(title, x_label, y_label):
     """
     What information does the plot produced by this function tell you?
@@ -333,7 +370,7 @@ def showPlot2(title, x_label, y_label):
     times1 = []
     times2 = []
     for width in [10, 20, 25, 50]:
-        height = 300//width
+        height = 300 // width
         print("Plotting cleaning time for a room of width:", width, "by height:", height)
         aspect_ratios.append(float(width) / height)
         times1.append(runSimulation(2, 1.0, width, height, 0.8, 200, StandardRobot))
@@ -345,10 +382,9 @@ def showPlot2(title, x_label, y_label):
     pylab.xlabel(x_label)
     pylab.ylabel(y_label)
     pylab.show()
-    
 
 # === Problem 6
-# NOTE: If you are running the simulation, you will have to close it 
+# NOTE: If you are running the simulation, you will have to close it
 # before the plot will show up.
 
 #

@@ -6,6 +6,7 @@ import numpy as np
 import ps2_visualize
 import pylab
 
+
 ##################
 ## Comment/uncomment the relevant lines, depending on which version of Python you have
 ##################
@@ -308,6 +309,7 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     robots = []
     clock_ticks = 0
     for trial in range(num_trials):
+        anim = ps2_visualize.RobotVisualization(num_robots, width, height)
         room = RectangularRoom(width, height)
         for r in range(num_robots):
             robots.append(robot_type(room, speed))
@@ -315,15 +317,16 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
             clock_ticks += 1
             for robot in robots:
                 robot.updatePositionAndClean()
+            anim.update(room, robots)
             if (room.getNumCleanedTiles() / room.getNumTiles()) >= min_coverage:
                 robots.clear()
                 break
+    anim.done()
     return clock_ticks / num_trials
 
 
 # Uncomment this line to see how much your simulation takes on average
-print(runSimulation(3, 1.0, 20, 20, 1, 30, StandardRobot))
-
+# print(runSimulation(3, 1.0, 5, 5, 1, 1, StandardRobot))
 
 # === Problem 5
 class RandomWalkRobot(Robot):

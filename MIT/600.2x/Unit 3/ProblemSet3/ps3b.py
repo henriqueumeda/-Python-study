@@ -34,20 +34,23 @@ class SimpleVirus(object):
         maxBirthProb: Maximum reproduction probability (a float between 0-1)        
         clearProb: Maximum clearance probability (a float between 0-1).
         """
+        self.maxBirthProb = maxBirthProb
+        self.clearProb = clearProb
 
-        # TODO
 
     def getMaxBirthProb(self):
         """
         Returns the max birth probability.
         """
-        # TODO
+        return self.maxBirthProb
+
 
     def getClearProb(self):
         """
         Returns the clear probability.
         """
-        # TODO
+        return self.clearProb
+
 
     def doesClear(self):
         """ Stochastically determines whether this virus particle is cleared from the
@@ -55,10 +58,12 @@ class SimpleVirus(object):
         returns: True with probability self.getClearProb and otherwise returns
         False.
         """
+        clearProb = self.getClearProb()
+        if random.random() <= clearProb:
+            return True
+        return False
 
-        # TODO
 
-    
     def reproduce(self, popDensity):
         """
         Stochastically determines whether this virus particle reproduces at a
@@ -78,9 +83,10 @@ class SimpleVirus(object):
         maxBirthProb and clearProb values as this virus. Raises a
         NoChildException if this virus particle does not reproduce.               
         """
-
-        # TODO
-
+        repProb = self.maxBirthProb * (1 - popDensity)
+        if random.random() <= repProb:
+            return SimpleVirus(self.maxBirthProb, self.clearProb)
+        return NoChildException()
 
 
 class Patient(object):

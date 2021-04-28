@@ -86,7 +86,8 @@ class SimpleVirus(object):
         repProb = self.maxBirthProb * (1 - popDensity)
         if random.random() <= repProb:
             return SimpleVirus(self.maxBirthProb, self.clearProb)
-        return NoChildException()
+        raise NoChildException()
+
 
 
 class Patient(object):
@@ -105,21 +106,22 @@ class Patient(object):
 
         maxPop: the maximum virus population for this patient (an integer)
         """
+        self.viruses = viruses
+        self.maxPop = maxPop
 
-        # TODO
 
     def getViruses(self):
         """
         Returns the viruses in this Patient.
         """
-        # TODO
+        return self.viruses
 
 
     def getMaxPop(self):
         """
         Returns the max population.
         """
-        # TODO
+        return self.maxPop
 
 
     def getTotalPop(self):
@@ -127,8 +129,7 @@ class Patient(object):
         Gets the size of the current total virus population. 
         returns: The total virus population (an integer)
         """
-
-        # TODO        
+        return len(self.viruses)
 
 
     def update(self):
@@ -149,10 +150,21 @@ class Patient(object):
         returns: The total virus population at the end of the update (an
         integer)
         """
-
-        # TODO
-
-
+        total_viruses = self.getTotalPop()
+        updated_viruses = self.viruses[:]
+        for virus in self.viruses:
+            if virus.doesClear() == True:
+                updated_viruses.remove(virus)
+            else:
+                popDensity = self.getTotalPop()/self.getMaxPop()
+                try:
+                    child_virus = virus.reproduce(popDensity)
+                    total_viruses += 1
+                    updated_viruses.append(child_virus)
+                except NoChildException:
+                    continue
+        self.viruses = updated_viruses
+        return total_viruses
 
 #
 # PROBLEM 2

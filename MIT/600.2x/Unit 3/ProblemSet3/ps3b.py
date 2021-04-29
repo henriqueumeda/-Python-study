@@ -1,6 +1,8 @@
 # Problem Set 3: Simulating the Spread of Disease and Virus Population Dynamics 
 
 import random
+
+import numpy as np
 import pylab
 
 ''' 
@@ -166,6 +168,7 @@ class Patient(object):
         self.viruses = updated_viruses
         return total_viruses
 
+
 #
 # PROBLEM 2
 #
@@ -184,10 +187,29 @@ def simulationWithoutDrug(numViruses, maxPop, maxBirthProb, clearProb,
     clearProb: Maximum clearance probability (a float between 0-1)
     numTrials: number of simulation runs to execute (an integer)
     """
+    timestep_virus = []
+    for trial in range(numTrials):
+        viruses = []
+        for i in range(numViruses):
+            viruses.append(SimpleVirus(maxBirthProb, clearProb))
+        patient = Patient(viruses, maxPop)
+        for timestep in range(300):
+            total_virus = patient.update()
+            try:
+                timestep_virus[timestep] += total_virus
+            except IndexError:
+                timestep_virus.append(total_virus)
+    timestep_virus_array = np.array(timestep_virus, dtype='f')
+    timestep_virus_average = list(timestep_virus_array/numTrials)
+    pylab.plot(timestep_virus_average, label="SimpleVirus")
+    pylab.title("SimpleVirus simulation")
+    pylab.xlabel("Time Steps")
+    pylab.ylabel("Average Virus Population")
+    pylab.legend(loc="best")
+    pylab.show()
 
-    # TODO
 
-
+# simulationWithoutDrug(100, 1000, 0.1, 0.05, 30)
 
 #
 # PROBLEM 3

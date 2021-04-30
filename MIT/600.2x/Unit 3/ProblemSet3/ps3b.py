@@ -39,20 +39,17 @@ class SimpleVirus(object):
         self.maxBirthProb = maxBirthProb
         self.clearProb = clearProb
 
-
     def getMaxBirthProb(self):
         """
         Returns the max birth probability.
         """
         return self.maxBirthProb
 
-
     def getClearProb(self):
         """
         Returns the clear probability.
         """
         return self.clearProb
-
 
     def doesClear(self):
         """ Stochastically determines whether this virus particle is cleared from the
@@ -63,8 +60,8 @@ class SimpleVirus(object):
         clearProb = self.getClearProb()
         if random.random() <= clearProb:
             return True
-        return False
-
+        else:
+            return False
 
     def reproduce(self, popDensity):
         """
@@ -88,8 +85,8 @@ class SimpleVirus(object):
         repProb = self.maxBirthProb * (1 - popDensity)
         if random.random() <= repProb:
             return SimpleVirus(self.maxBirthProb, self.clearProb)
-        raise NoChildException()
-
+        else:
+            raise NoChildException()
 
 
 class Patient(object):
@@ -111,13 +108,11 @@ class Patient(object):
         self.viruses = viruses
         self.maxPop = maxPop
 
-
     def getViruses(self):
         """
         Returns the viruses in this Patient.
         """
         return self.viruses
-
 
     def getMaxPop(self):
         """
@@ -125,14 +120,12 @@ class Patient(object):
         """
         return self.maxPop
 
-
     def getTotalPop(self):
         """
         Gets the size of the current total virus population. 
         returns: The total virus population (an integer)
         """
         return len(self.viruses)
-
 
     def update(self):
         """
@@ -236,21 +229,21 @@ class ResistantVirus(SimpleVirus):
         mutProb: Mutation probability for this virus particle (a float). This is
         the probability of the offspring acquiring or losing resistance to a drug.
         """
-
-        # TODO
-
+        SimpleVirus.__init__(self, maxBirthProb, clearProb)
+        self.resistances = resistances
+        self.mutProb = mutProb
 
     def getResistances(self):
         """
         Returns the resistances for this virus.
         """
-        # TODO
+        return self.resistances
 
     def getMutProb(self):
         """
         Returns the mutation probability for this virus.
         """
-        # TODO
+        return self.mutProb
 
     def isResistantTo(self, drug):
         """
@@ -263,9 +256,13 @@ class ResistantVirus(SimpleVirus):
         returns: True if this virus instance is resistant to the drug, False
         otherwise.
         """
-        
-        # TODO
-
+        try:
+            if self.resistances[drug] == True:
+                return True
+            else:
+                return False
+        except:
+            return False
 
     def reproduce(self, popDensity, activeDrugs):
         """
@@ -311,10 +308,38 @@ class ResistantVirus(SimpleVirus):
         maxBirthProb and clearProb values as this virus. Raises a
         NoChildException if this virus particle does not reproduce.
         """
+        offspring_resistances = {}
+        repProb = self.maxBirthProb * (1 - popDensity)
+        for applied_drug in activeDrugs:
+            if self.resistances[applied_drug] == False:
+                raise NoChildException()
+        if random.random() > repProb:
+            raise NoChildException()
+        else:
+            for drug, is_resistant in self.resistances.items():
+                if is_resistant == True:
+                    resistance_chance = 1 - self.mutProb
+                else:
+                    resistance_chance = self.mutProb
 
-        # TODO
+                if random.random() <= resistance_chance:
+                    offspring_resistances[drug] = True
+                else:
+                    offspring_resistances[drug] = False
 
-            
+            return ResistantVirus(self.maxBirthProb, self.clearProb, offspring_resistances, self.mutProb)
+
+
+random.seed(0)
+# for i in range(5):
+#     print(random.random())
+
+resistances = {'glug':True, 'blabla':False}
+teste = ResistantVirus(0.9, 0.1, resistances, 0.3)
+activeDrugs = ['glug']
+print(teste.reproduce(0.05, activeDrugs))
+
+
 
 class TreatedPatient(Patient):
     """

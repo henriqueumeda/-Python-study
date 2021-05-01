@@ -311,8 +311,11 @@ class ResistantVirus(SimpleVirus):
         offspring_resistances = {}
         repProb = self.maxBirthProb * (1 - popDensity)
         for applied_drug in activeDrugs:
-            if self.resistances[applied_drug] == False:
-                raise NoChildException()
+            try:
+                if self.resistances[applied_drug] == False:
+                    raise NoChildException()
+            except:
+                pass
         if random.random() > repProb:
             raise NoChildException()
         else:
@@ -467,5 +470,43 @@ def simulationWithDrug(numViruses, maxPop, maxBirthProb, clearProb, resistances,
     numTrials: number of simulation runs to execute (an integer)
     
     """
+    timestep_virus = []
+    timestep_guttagonol = []
+    for trial in range(numTrials):
+        viruses = []
+        for i in range(numViruses):
+            viruses.append(ResistantVirus(maxBirthProb, clearProb, resistances, mutProb))
+        patient = TreatedPatient(viruses, maxPop)
+        for timestep in range(150):
+            total_virus = patient.update()
+            total_guttagonol = patient.getResistPop(['guttagonol'])
+            try:
+                timestep_virus[timestep] += total_virus
+                timestep_guttagonol[timestep] += total_guttagonol
+            except IndexError:
+                timestep_virus.append(total_virus)
+                timestep_guttagonol.append(total_guttagonol)
+        patient.addPrescription('guttagonol')
+        for timestep in range(150, 300):
+            total_virus = patient.update()
+            total_guttagonol = patient.getResistPop(['guttagonol'])
+            try:
+                timestep_virus[timestep] += total_virus
+                timestep_guttagonol[timestep] += total_guttagonol
+            except IndexError:
+                timestep_virus.append(total_virus)
+                timestep_guttagonol.append(total_guttagonol)
+    timestep_virus_average = [x/numTrials for x in timestep_virus]
+    timestep_guttagonol_average = [x/numTrials for x in timestep_guttagonol]
+    pylab.figure('simulationWithDrug')
+    pylab.plot(timestep_virus_average, label="Total Virus")
+    pylab.plot(timestep_guttagonol_average, label="Guttagonol-resistant Virus")
+    pylab.title("ResistantVirus simulation")
+    pylab.xlabel("time step")
+    pylab.ylabel("# viruses")
+    pylab.legend(loc="best")
+    pylab.show()
 
-    # TODO
+random.seed(0)
+resistances = {'guttagonol': False}
+simulationWithDrug(1, 10, 1.0, 0.0, {}, 1.0, 5)

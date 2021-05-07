@@ -58,7 +58,7 @@ def fitData(fileName):
     k = 1/a
     pylab.plot(xVals, estYVals, label = 'Linear fit, k = '
                + str(round(k, 5)) + ', R2 = '
-               + str(round(rSquare(estYVals, yVals), 1)))
+               + str(round(rSquare(estYVals, yVals), 4)))
     pylab.legend(loc = 'best')
 
 # fitData('springData.txt')
@@ -118,9 +118,11 @@ def fitData3(fileName):
     a,b = pylab.polyfit(xVals, yVals, 1)  # fix y = ax + b
     # use line equation to graph predicted values
     estYVals = a*xVals + b
+    estYVals = pylab.array(estYVals)
     k = 1/a
     pylab.plot(xVals, estYVals, label = 'Linear fit, k = '
-               + str(round(k, 5)))
+               + str(round(k, 5)) + ', R2 = '
+               + str(round(rSquare(estYVals, yVals), 4)))
     pylab.legend(loc = 'best')
 
 # fitData3('springData.txt')
@@ -199,3 +201,8 @@ def tryFits1(fName):
 ##tryFits1('launcherData.txt')
 ##pylab.show()
 
+fitData('springData.txt')
+pylab.show()
+
+fitData3('springData.txt')
+pylab.show()

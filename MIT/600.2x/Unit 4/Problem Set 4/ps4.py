@@ -130,8 +130,14 @@ def generate_models(x, y, degs):
         a list of numpy arrays, where each array is a 1-d array of coefficients
         that minimizes the squared error of the fitting polynomial
     """
-    # TODO
-    pass
+    x = np.array(x)
+    y = np.array(y)
+    models = []
+    for degree in degs:
+        model = np.polyfit(x, y, degree)
+        models.append(np.array(model))
+    return models
+
 
 # Problem 2
 def r_squared(y, estimated):

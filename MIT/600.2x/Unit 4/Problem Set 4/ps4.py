@@ -179,8 +179,20 @@ def evaluate_models_on_training(x, y, models):
     Returns:
         None
     """
-    # TODO
-    pass
+    for model in models:
+        xVals = pylab.array(x)
+        yVals = pylab.array(y)
+        pylab.plot(xVals, yVals, 'bo', label='Data points')
+        pylab.title(model)
+        pylab.xlabel('Year')
+        pylab.ylabel('Temperature (ºC)')
+        a = list(model)[0]
+        b = list(model)[1]
+        estYVals = a * xVals + b
+        estYVals = pylab.array(estYVals)
+        pylab.plot(xVals, estYVals, 'r-', label='Linear fit, R2 = ' + str(round(r_squared(yVals, estYVals), 3)))
+        pylab.legend(loc='best')
+        pylab.show()
 
 
 ### Begining of program
@@ -200,5 +212,5 @@ x1 = INTERVAL_1
 x2 = INTERVAL_2
 y = []
 # MISSING LINES
-models = generate_models(x, y, [1])    
-evaluate_models_on_training(x, y, models)
+# models = generate_models(x, y, [1])
+# evaluate_models_on_training(x, y, models)

@@ -20,10 +20,9 @@ This is the repo in which I post my learning journey in Introduction to Data Sci
 
 
 # Stack 
-- Jupyter Notebook
 - Pandas
 - Numpy
-- Regular Expressions
+- RE (Regular Expressions)
 
 
 # Certificate 

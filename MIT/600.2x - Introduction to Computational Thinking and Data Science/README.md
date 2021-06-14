@@ -16,14 +16,6 @@ This is the repo in which I post my learning journey in Introduction to Data Sci
 - Statistical fallacies
 
 
-# Repository :
-- Notebooks - The folder with notebooks that show all the processes I took during classes
-- csv - The folder with all csv files used during classes
-- txt - The folder with all txt files used during classes
-- images - The folder with all images used during classes and in the repo Readme
-- assignments - The folder with all files used in the week assignments resolutions
-
-
 # Stack 
 - Numpy
 - Pylab

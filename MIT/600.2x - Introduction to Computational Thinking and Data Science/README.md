@@ -1,5 +1,5 @@
 
-![](images/um-logo.png)
+![](images/mit-logo.png)
 
 
 This is the repo in which I post my learning journey in Introduction to Data Science in Python course, provided by University of Michigan.

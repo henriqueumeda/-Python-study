@@ -29,6 +29,3 @@ This is the repo in which I post my learning journey in Introduction to Data Sci
 The course was successfully concluded on 13/06/2021.
 
 ![](images/certificate.png)
-
-
-

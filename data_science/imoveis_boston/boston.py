@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor
 #função para carregar o dataset
 @st.cache
 def get_data():
-    return pd.read_csv("/Users/Issamu Umeda/Documents/GitHub/-Estudo-python/data_science/imoveis_boston/data.csv")
+    return pd.read_csv("/Users/Issamu Umeda/Documents/GitHub/-Python-study/data_science/imoveis_boston/data.csv")
 
 #função para treinar o modelo
 def train_model():
@@ -60,7 +60,7 @@ st.sidebar.subheader("Defina os atributos do imóvel para predição")
 #mapeando dados do usuário para cada atributo
 crim = st.sidebar.number_input("Taxa de Criminalidade", value=data.CRIM.mean())
 indus = st.sidebar.number_input("Proporção de Hectares de Negócio", value=data.CRIM.mean())
-chas = st.sidebar.selectbox("Faz limite com o rio?", ("Sim", "Não"))
+chas = st.sidebar.selectbox("Faz limite com o rio0?", ("Sim", "Não"))
 
 #transformando o dado de entrada em valor binário
 chas = 1 if chas == "Sim" else 0
